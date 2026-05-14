@@ -45,7 +45,12 @@ def validate_java_rules(code):
     return results
 
 # --- 5. CONFIGURACIÓN DE IA (GEMINI) ---
-api_key = st.sidebar.text_input("Google API Key", type="password")
+# 1. Intentar obtener la clave de Secrets o del input
+if "GOOGLE_API_KEY" in st.secrets:
+    api_key = st.secrets["GOOGLE_API_KEY"]
+else:
+    api_key = st.sidebar.text_input("Google API Key", type="password")
+#api_key = st.sidebar.text_input("Google API Key", type="password")
 
 if api_key:
     genai.configure(api_key=api_key)
