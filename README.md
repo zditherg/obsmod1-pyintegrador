@@ -60,22 +60,22 @@ Puedes probar la aplicación en el siguiente link: https://obsmod1-pyintegrador-
 ## 📸 Capturas de Pantalla
 1. ** Pantalla Principal **
 
-![alt text](principal.png)
+![alt text](img/principal.png)
 
 2. ** Seleccionar archivo .java **
-![alt text](selecciona.png)
+![alt text](img/selecciona.png)
 
 3. ** Lectura del archivo cargado **
-![alt text](lectura.png)
+![alt text](img/lectura.png)
 
 4. ** Resultado del Diagnóstico **
-![alt text](diagnostico.png)
+![alt text](img/diagnostico.png)
 
 5. ** Aplicación de Refactorización **
-![alt text](refactor.png)
+![alt text](img/refactor.png)
 
 6. ** Aplicación de Refactorización - Parte 2 **
-![alt text](refactor2.png)
+![alt text](img/refactor2.png)
 
 7. ** Validación de Código Refactorizado **
     ```bash
@@ -98,17 +98,17 @@ Puedes probar la aplicación en el siguiente link: https://obsmod1-pyintegrador-
             results.append(f"✅ **{name}**: {msg}" if match else f"⚠️ **{name}**: No verificado.")
     return results
 
-![alt text](validarefactor.png)
+![alt text](img/validarefactor.png)
 
 8. ** Construcción del Docker File para Prueba **
-![alt text](docker1.png)
+![alt text](img/docker1.png)
 
 9. ** Chat Interactivo con Retención **
-![alt text](chat1.png)
+![alt text](img/chat1.png)
 
 10. ** Chat Interactivo con Retención **
-![alt text](chat2.png)
+![alt text](img/chat2.png)
 
 11. ** Chat Interactivo: Se solicita agregar una nueva operación **
-![alt text](chat3.png)
-![alt text](chat4.png)
+![alt text](img/chat3.png)
+![alt text](img/chat4.png)
