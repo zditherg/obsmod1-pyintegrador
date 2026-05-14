@@ -58,26 +58,26 @@ Ingresa al siguiente link, sino tienes acceso debes de registrarte.
 Puedes probar la aplicación en el siguiente link: https://obsmod1-pyintegrador-uuqjfcziiwxxdjqs29wnf2.streamlit.app/
 
 ## 📸 Capturas de Pantalla
-1. ** Pantalla Principal **
+1. **Pantalla Principal**
 
 ![alt text](img/principal.png)
 
-2. ** Seleccionar archivo .java **
+2. **Seleccionar archivo .java**
 ![alt text](img/selecciona.png)
 
-3. ** Lectura del archivo cargado **
+3. **Lectura del archivo cargado**
 ![alt text](img/lectura.png)
 
-4. ** Resultado del Diagnóstico **
+4. **Resultado del Diagnóstico**
 ![alt text](img/diagnostico.png)
 
-5. ** Aplicación de Refactorización **
+5. **Aplicación de Refactorización**
 ![alt text](img/refactor.png)
 
-6. ** Aplicación de Refactorización - Parte 2 **
+6. **Aplicación de Refactorización - Parte 2**
 ![alt text](img/refactor2.png)
 
-7. ** Validación de Código Refactorizado **
+7. **Validación de Código Refactorizado**
     ```bash
     Utiliza el mock para CheckStyle:
     def validate_java_rules(code):
@@ -100,15 +100,15 @@ Puedes probar la aplicación en el siguiente link: https://obsmod1-pyintegrador-
 
 ![alt text](img/validarefactor.png)
 
-8. ** Construcción del Docker File para Prueba **
+8. **Construcción del Docker File para Prueba**
 ![alt text](img/docker1.png)
 
-9. ** Chat Interactivo con Retención **
+9. **Chat Interactivo con Retención**
 ![alt text](img/chat1.png)
 
-10. ** Chat Interactivo con Retención **
+10. **Chat Interactivo con Retención**
 ![alt text](img/chat2.png)
 
-11. ** Chat Interactivo: Se solicita agregar una nueva operación **
+11. **Chat Interactivo: Se solicita agregar una nueva operación**
 ![alt text](img/chat3.png)
 ![alt text](img/chat4.png)
