@@ -1,6 +1,6 @@
 import streamlit as st
 import google.generativeai as genai
-import os
+import re
 
 # --- CONFIGURACIÓN DE LA PÁGINA ---
 st.set_page_config(page_title="J-Architect: Java AI Reviewer", layout="wide", page_icon="☕")
@@ -23,12 +23,12 @@ if api_key:
     model = genai.GenerativeModel(
         model_name="gemini-2.5-flash",
         system_instruction=(
-            "Actúa como un Principal Software Architect experto en Java, Spring Boot y Quarkus. "
-            "Tu objetivo es analizar código para identificar deuda técnica, malas prácticas y antipatrones; revisiones profundas de buenas prácticas"
-            "IMPORTANTE: Debes separar tu respuesta SIEMPRE con estos delimitadores para que yo pueda procesarlos:\n"
-            "##DIAGNOSTICO## para el análisis de deuda y antipatrones.\n"
-            "##REFACTOR## para el código sugerido.\n"
-            "##DEVOPS## para configuraciones de Docker o CI/CD."
+            "Actúa como un Principal Software Architect experto en Java (Nativo, Spring Boot y Quarkus). "
+            "Tu tarea es recibir código y devolver SIEMPRE tres secciones claramente marcadas:\n"
+            "1. [DIAGNOSTICO]: Analiza deuda técnica y antipatrones.\n"
+            "2. [REFACTOR]: Devuelve el código COMPLETO y corregido dentro de un bloque de código markdown (```java ... ```).\n"
+            "3. [DEVOPS]: Sugiere configuración de Docker o CI/CD.\n"
+            "Sé crítico con el rendimiento y la seguridad."
         )
     )
 else:
@@ -40,7 +40,7 @@ st.subheader("Intelligent Code Reviewer for Java Ecosystem")
 
 # Barra lateral para carga de archivos
 st.sidebar.header("📂 Carga de Proyecto")
-uploaded_file = st.sidebar.file_uploader("Sube un archivo .java o pom.xml", type=["java", "xml", "properties"])
+uploaded_file = st.sidebar.file_uploader("Sube archivo .java o pom.xml, properties", type=["java", "xml", "properties"])
 
 col1, col2 = st.columns([1, 1])
 
@@ -61,42 +61,49 @@ with col1:
     analyze_button = st.button("🚀 Iniciar Auditoría de Arquitectura", type="primary")
 
 with col2:
-    st.markdown("### 📊 Resultado del Análisis")
+    st.markdown("### 📊 Resultado")
     
     if analyze_button and code_input:
-        with st.spinner("Analizando arquitectura..."):
+        with st.spinner("El Arquitecto está trabajando..."):
             try:
-                prompt = f"Analiza el siguiente código y genera el reporte estructurado:\n\n{code_input}"
-                response = model.generate_content(prompt).text
+                response = model.generate_content(f"Analiza este código:\n\n{code_input}").text
                 
-                # Creación de Tabs
-                tab_diag, tab_refactor, tab_devops = st.tabs([
-                    "📝 Diagnóstico de Deuda", 
-                    "🛠️ Código Refactorizado", 
-                    "🚀 DevOps & Deploy"
-                ])
+                # --- LÓGICA DE EXTRACCIÓN (PARSING) ---
+                # Separamos por las etiquetas definidas en el system_instruction
+                diag_part = re.search(r"\[DIAGNOSTICO\](.*?)(?=\[REFACTOR\]|$)", response, re.S)
+                refactor_part = re.search(r"\[REFACTOR\](.*?)(?=\[DEVOPS\]|$)", response, re.S)
+                devops_part = re.search(r"\[DEVOPS\](.*?)$", response, re.S)
 
-                # Lógica simple para repartir el contenido (si la IA sigue los delimitadores)
-                parts = response.split("##")
-                
+                tab_diag, tab_refactor, tab_devops = st.tabs(["📝 Diagnóstico", "🛠️ Refactor", "🚀 DevOps"])
+
                 with tab_diag:
-                    st.info("Resumen de hallazgos y antipatrones detectados.")
-                    # Si la IA usó los delimitadores, mostramos esa parte, si no, mostramos todo
-                    st.markdown(response) 
-                
+                    if diag_part:
+                        st.markdown(diag_part.group(1).strip())
+                    else:
+                        st.markdown(response) # Fallback si no detecta etiquetas
+
                 with tab_refactor:
-                    st.success("Propuesta de código limpio y optimizado.")
-                    # Aquí podrías usar lógica de búsqueda de strings para separar el código
-                    st.code(code_input, language="java") # Placeholder, la IA dará el nuevo
-                
+                    if refactor_part:
+                        refactor_text = refactor_part.group(1).strip()
+                        # Extraemos solo el bloque de código entre ```java ... ```
+                        code_match = re.search(r"```java\s*(.*?)\s*```", refactor_text, re.S)
+                        if code_match:
+                            clean_code = code_match.group(1)
+                            st.code(clean_code, language="java")
+                            st.download_button("Descargar Código Refactorizado", clean_code, file_name="Refactored.java")
+                        else:
+                            st.markdown(refactor_text)
+                    else:
+                        st.warning("No se encontró una propuesta de refactorización específica.")
+
                 with tab_devops:
-                    st.warning("Configuración recomendada para Docker/Kubernetes.")
-                    st.markdown("Generando archivo `Dockerfile` optimizado...")
+                    if devops_part:
+                        st.markdown(devops_part.group(1).strip())
 
             except Exception as e:
                 st.error(f"Error: {e}")
     else:
-        st.info("Ingresa código o sube un archivo y presiona 'Iniciar Auditoría'.")
+        st.info("Carga código para ver el análisis.")
 
 # --- PIE DE PÁGINA ---
 st.sidebar.markdown("---")
